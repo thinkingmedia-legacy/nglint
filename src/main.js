@@ -1,6 +1,10 @@
 require('./bootstrap.js');
+
 var logger = require('winston');
 var params = require('./params.js');
+var glob = require('glob');
+var fs = require('fs-extra');
+var _ = require('lodash');
 
 if(params.version)
 {
@@ -8,7 +12,7 @@ if(params.version)
     return;
 }
 
-if(params.help)
+if(params.help || params.source === null)
 {
     params.usage();
     return;
@@ -23,18 +27,6 @@ catch($ex)
     console.error("fatal: " + $ex.message);
     return;
 }
-
-if(!params.silent)
-{
-    params.copyright();
-    params.showConfig();
-}
-
-return;
-
-var glob = require('glob');
-var fs = require('fs-extra');
-var _ = require('lodash');
 
 // what will be done, and in what order
 var tasks = [
@@ -68,7 +60,7 @@ function process(task, result) {
 }
 
 // collect files names into an array
-glob('./src/**/!(*.spec).js', function (er, files) {
+glob(params.source + '/**/!(*.spec).js', function (er, files) {
 
     _.each(tasks, function (task) {
         console.log('');
