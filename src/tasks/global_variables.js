@@ -1,3 +1,4 @@
+var logger = require('winston');
 var _ = require('lodash');
 
 var global_window = /(\$?window)[^$_a-zA-Z0-9]/g;
@@ -44,9 +45,8 @@ module.exports = {
         return original;
     },
     report: function () {
-        console.log('');
         _.each(this.data, function (value, key) {
-            console.log(key + ': ' + value);
+            logger.info(key + ': ' + value);
         });
     }
 };

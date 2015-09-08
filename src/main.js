@@ -63,8 +63,8 @@ function process(task, result) {
 glob(params.source + '/**/!(*.spec).js', function (er, files) {
 
     _.each(tasks, function (task) {
-        console.log('');
-        console.log('Performing task: ' + task.name);
+        logger.info('');
+        logger.info('Performing task: ' + task.name);
 
         _.isFunction(task.firstPass) && task.firstPass();
 
@@ -92,8 +92,9 @@ glob(params.source + '/**/!(*.spec).js', function (er, files) {
 
     _.each(tasks, function (task) {
         if (_.isFunction(task.report)) {
-            console.log('');
-            console.log('Report task: ' + task.name);
+            logger.info('');
+            logger.info('Report task: ' + task.name);
+            logger.info('');
             task.report();
         }
     });

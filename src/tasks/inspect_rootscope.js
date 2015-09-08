@@ -1,3 +1,4 @@
+var logger = require('winston');
 var _ = require('lodash');
 
 var declare_function = /function\s*\([^\)]*\)/g;
@@ -48,15 +49,14 @@ module.exports = {
         return original;
     },
     report: function () {
-        console.log('');
         _.each(this.data, function (value, key) {
             if (_.isObject(value)) {
                 _.each(value, function (value2, key2) {
-                    console.log(key + ': ' + key2 + ' -> ' + value2);
+                    logger.info(key + ': ' + key2 + ' -> ' + value2);
                 });
                 return;
             }
-            console.log(key + ': ' + value);
+            logger.info(key + ': ' + value);
         });
     }
 };

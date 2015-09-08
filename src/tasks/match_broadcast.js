@@ -1,3 +1,4 @@
+var logger = require('winston');
 var _ = require('lodash');
 
 /**
@@ -43,10 +44,9 @@ module.exports = {
             : this.second(original, compress, lines);
     },
     report: function () {
-        console.log('');
         _.each(this.broadcasts, function (broadcast) {
             var c = ~~this.counters[broadcast];
-            console.log('Broadcast: ' + broadcast + ' Listeners: ' + c);
+            logger.info('Broadcast: ' + broadcast + ' Listeners: ' + c);
         }.bind(this));
     }
 };
