@@ -40,6 +40,8 @@
   "dependencies": {
     "fs-extra": "^0.24.0",
     "glob": "^5.0.14",
-    "lodash": "^3.10.1"
+    "lodash": "^3.10.1",
+    "optjs": "^3.2.1-boom",
+    "winston": "^1.0.1"
   }
 }

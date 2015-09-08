@@ -1,3 +1,37 @@
+require('./bootstrap.js');
+var logger = require('winston');
+var params = require('./params.js');
+
+if(params.version)
+{
+    params.showVersion();
+    return;
+}
+
+if(params.help)
+{
+    params.usage();
+    return;
+}
+
+try
+{
+    params.validate();
+}
+catch($ex)
+{
+    console.error("fatal: " + $ex.message);
+    return;
+}
+
+if(!params.silent)
+{
+    params.copyright();
+    params.showConfig();
+}
+
+return;
+
 var glob = require('glob');
 var fs = require('fs-extra');
 var _ = require('lodash');
