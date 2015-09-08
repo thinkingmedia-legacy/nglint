@@ -1,0 +1,25 @@
+{
+  "name": "angularjs-inspector",
+  "version": "1.0.0",
+  "description": "Node.js source code inspector for AngularJS projects.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thinkingmedia/angularjs-inspector.git"
+  },
+  "keywords": [
+    "angularjs",
+    "inspector",
+    "quality",
+    "lint"
+  ],
+  "author": "Mathew Foscarini",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thinkingmedia/angularjs-inspector/issues"
+  },
+  "homepage": "https://github.com/thinkingmedia/angularjs-inspector#readme"
+}
