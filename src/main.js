@@ -71,9 +71,7 @@ glob(params.source + '/**/!(*.spec).js', function (er, files) {
         _.each(files, function (file) {
             var result = read(file);
             if (!task.filterFile || task.filterFile(result.original, result.compressed, result.lines)) {
-                //console.log(file);
-                result = process(task, result);
-                fs.writeFileSync(file, result, 'utf8');
+                process(task, result);
             }
         });
 
@@ -82,9 +80,7 @@ glob(params.source + '/**/!(*.spec).js', function (er, files) {
             _.each(files, function (file) {
                 var result = read(file);
                 if (!task.filterFile || task.filterFile(result.original, result.compressed, result.lines)) {
-                    //console.log(file);
-                    result = process(task, result);
-                    fs.writeFileSync(file, result, 'utf8');
+                    process(task, result);
                 }
             });
         }

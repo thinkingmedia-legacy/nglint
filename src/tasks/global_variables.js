@@ -41,8 +41,6 @@ module.exports = {
                 }
             }, this);
         }, this);
-
-        return original;
     },
     report: function () {
         _.each(this.data, function (value, key) {

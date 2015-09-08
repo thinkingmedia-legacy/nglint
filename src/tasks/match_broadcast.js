@@ -24,7 +24,6 @@ module.exports = {
             }
         }.bind(this));
         this.broadcasts = _.uniq(this.broadcasts);
-        return original;
     },
     second: function (original, compressed, lines) {
         var self = this;
@@ -36,7 +35,6 @@ module.exports = {
                 }
             });
         });
-        return original;
     },
     process: function (original, compress, lines) {
         return this.pass == 'first'

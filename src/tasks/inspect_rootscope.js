@@ -46,7 +46,6 @@ module.exports = {
                 this.data.reads++;
             }
         }, this);
-        return original;
     },
     report: function () {
         _.each(this.data, function (value, key) {
