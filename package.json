@@ -2,7 +2,23 @@
   "name": "angularjs-inspector",
   "version": "1.0.0",
   "description": "Node.js source code inspector for AngularJS projects.",
-  "main": "main.js",
+  "preferGlobal": "true",
+  "author": {
+    "name": "Mathew Foscarini",
+    "email": "support@thinkingmedia.ca",
+    "url": "http://www.thinkingmedia.ca"
+  },
+  "maintainers": [
+    {
+      "name": "Mathew Foscarini",
+      "email": "support@thinkingmedia.ca",
+      "url": "http://www.thinkingmedia.ca"
+    }
+  ],
+  "bin": {
+    "ngInspector": "bin/ngInspector"
+  },
+  "main": "./src/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,13 +32,12 @@
     "quality",
     "lint"
   ],
-  "author": "Mathew Foscarini",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/thinkingmedia/angularjs-inspector/issues"
   },
   "homepage": "https://github.com/thinkingmedia/angularjs-inspector#readme",
-  "devDependencies": {
+  "dependencies": {
     "fs-extra": "^0.24.0",
     "glob": "^5.0.14",
     "lodash": "^3.10.1"
