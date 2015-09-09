@@ -6,20 +6,14 @@ var lint = require('../lint');
  * Counts the usage of global variables (window, document).
  */
 module.exports = {
-    data: {
-        window: 0,
-        $window: 0,
-        document: 0,
-        $document: 0
-    },
     globals: [
         {
             regex: /(\$?window)[^$_a-zA-Z0-9]/g,
-            counter: 'window'
+            name: 'window'
         },
         {
             regex: /(\$?document)[^$_a-zA-Z0-9]/g,
-            counter: 'document'
+            name: 'document'
         }
     ],
     filter: function () {
@@ -27,22 +21,11 @@ module.exports = {
     },
     firstPass: function () {
         _.each(this.globals, function (global) {
-            lint.each(function (line) {
-                var matches;
-                while ((matches = global.regex.exec(line)) != null) {
-                    var str = matches[1];
-                    if (_.startsWith(str, '$')) {
-                        this.data['$' + global.counter]++;
-                    } else {
-                        this.data[global.counter]++;
-                    }
+            lint.match(global.regex, function (match) {
+                if (!_.startsWith(match[1], '$')) {
+                    match.log("'" + global.name + "' should be injected using '$" + global.name + "'.");
                 }
             }, this);
         }, this);
-    },
-    report: function () {
-        _.each(this.data, function (value, key) {
-            logger.info(key + ': ' + value);
-        });
     }
 };

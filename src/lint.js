@@ -1,127 +1,117 @@
 var fs = require('fs');
 var _ = require('lodash');
-var MODES = require('./modes');
+var logger = require('winston');
 
-module.exports = {
+function Lint() {
     /**
      * @type {string}
      */
-    file: null,
+    this.file = null;
+
     /**
      * @type {string}
      */
-    pass: null,
+    this.pass = null;
+
     /**
      * @type {string}
      */
-    original: null,
-    /**
-     * @type {string}
-     */
-    compressed: null,
+    this.original = null;
+
     /**
      * @type {string[]}
      */
-    lines: null,
-
-    /**
-     * @type {number}
-     */
-    line: 0,
-
-    /**
-     * @type {number}
-     */
-    column: 0,
+    this.lines = null;
 
     /**
      * @param {string} file
      */
-    read: function (file) {
+    this.read = function (file) {
         this.file = file;
         this.original = fs.readFileSync(file, 'utf8');
-        this.compressed = this.original.replace(/[\r\n]/g, "");
-        this.compressed = this.original.replace(/\t/g, " ");
-        this.compressed = this.original.replace(/\s+/g, " ");
+        this.original = this.original.replace(/\t/g, '    ');
         this.lines = this.original.replace(/[\r]/g, "").split("\n");
-    },
+    };
 
     /**
      *
      */
-    clear: function () {
+    this.clear = function () {
         this.file = null;
         this.original = null;
-        this.compressed = null;
         this.lines = null;
-    },
+    };
 
     /**
      * @returns {boolean}
      */
-    isJs: function () {
+    this.isJs = function () {
         return !this.isTest() && _.endsWith(this.file.toLowerCase(), ".js");
-    },
+    };
 
     /**
      * @returns {boolean}
      */
-    isTest: function () {
+    this.isTest = function () {
         return _.endsWith(this.file.toLowerCase(), ".spec.js") || _.endsWith(this.file.toLowerCase(), ".test.js");
-    },
+    };
 
     /**
      * @returns {boolean}
      */
-    isHTML: function () {
+    this.isHTML = function () {
         return _.endsWith(this.file.toLowerCase(), ".html");
-    },
+    };
 
     /**
-     * @param {number=} mode
-     * @returns {string|string[]}
+     * @param {Number} offset
+     * @returns {{line:Number,column:Number}}
      */
-    getSource: function (mode) {
-        switch (mode) {
-            case MODES.COMPRESSED:
-                return this.compressed;
-            case MODES.LINES:
-                return this.lines;
-            case MODES.ORIGINAL:
-            default:
-                return this.original;
+    this.getCoordsByOffset = function (offset) {
+        var lines = this.original.substr(0, offset).split("\n");
+        return {
+            line: lines.length,
+            column: _.last(lines).length + 1,
+            text: this.lines[lines.length - 1]
         }
-    },
+    };
 
     /**
+     * Executes the callback for each line in the file.
+     *
      * @param {function(string)} fn
      * @param {*=} thisArg
      */
-    each: function (fn, thisArg) {
+    this.each = function (fn, thisArg) {
         for (this.line = 0; this.line < this.lines.length; this.line++) {
             fn.call(thisArg || this, this.lines[this.line]);
         }
-    },
+    };
 
     /**
+     * Executes the callback for each regexp match.
      *
      * @param {RegExp} regex
      * @param {function(Array)} fn
-     * @param {number=} mode
      * @param {*=} thisArg
      */
-    match: function (regex, fn, mode, thisArg) {
-        var sources = this.getSource(mode);
-        sources = _.isArray(sources) ? sources : [sources];
-
-        var matches;
-        while ((matches = global.regex.exec(line)) != null) {
-            var str = matches[1];
-            if (_.startsWith(str, '$')) {
-                this.data['$' + global.counter]++;
-            } else {
-                this.data[global.counter]++;
-            }
+    this.match = function (regex, fn, thisArg) {
+        var match;
+        while ((match = regex.exec(this.original)) != null) {
+            // attach a convenient log method
+            match.log = function (match, msg) {
+                var coords = this.getCoordsByOffset(match.index);
+                console.log(this.file + ':' + coords.line + ',' + coords.column);
+                console.log(coords.text);
+                console.log(Array(coords.column).join(' ') + '^');
+                console.log(msg);
+                console.log();
+            }.bind(this, match);
+            fn.call(thisArg, match);
         }
-    }
-};
+    };
+}
+
+var LinkObj = new Lint();
+logger.extend(LinkObj);
+module.exports = LinkObj;
