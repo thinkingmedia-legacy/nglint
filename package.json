@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thinkingmedia/nglist.git"
+    "url": "git+https://github.com/thinkingmedia/nglint.git"
   },
   "keywords": [
     "angularjs",
@@ -40,9 +40,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/thinkingmedia/nglist/issues"
+    "url": "https://github.com/thinkingmedia/nglint/issues"
   },
-  "homepage": "https://github.com/thinkingmedia/nglist#readme",
+  "homepage": "https://github.com/thinkingmedia/nglint#readme",
   "dependencies": {
     "fs-extra": "^0.24.0",
     "glob": "^5.0.14",
