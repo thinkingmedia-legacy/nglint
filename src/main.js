@@ -5,94 +5,58 @@ var params = require('./params.js');
 var glob = require('glob');
 var fs = require('fs-extra');
 var _ = require('lodash');
+var lint = require('./lint');
 
-if(params.version)
-{
+if (params.version) {
     params.showVersion();
     return;
 }
 
-if(params.help || params.source === null)
-{
+if (params.help || params.source === null) {
     params.usage();
     return;
 }
 
-try
-{
+try {
     params.validate();
 }
-catch($ex)
-{
+catch ($ex) {
     console.error("fatal: " + $ex.message);
     return;
 }
 
 // what will be done, and in what order
 var tasks = [
-    require('./tasks/match_broadcast'),
-    require('./tasks/inspect_rootscope'),
+    //require('./tasks/match_broadcast'),
+    //require('./tasks/inspect_rootscope'),
     require('./tasks/global_variables')
 ];
 
-function read(file) {
-    var original = fs.readFileSync(file, 'utf8');
-    var compressed = original.replace(/[\r\n]/g, "");
-    compressed = original.replace(/\t/g," ");
-    compressed = original.replace(/\s+/g," ");
-    return {
-        // different ways of reading the file
-        original: original,
-        // as one line without spaces
-        compressed: compressed,
-        // as an array
-        lines: original.replace(/[\r]/g, "").split("\n")
-    };
-}
-
-function process(task, result) {
-    // returns a string or an array
-    result = task.process(result.original, result.compressed, result.lines);
-    if (_.isUndefined(result)) {
-        throw new Error('Task failed to return result.');
-    }
-    return _.isArray(result) ? result.join("\n") : result;
+function callTaskMethod() {
+    var args = Array.prototype.slice.call(arguments);
+    var method = args.shift();
+    _.each(tasks, function (task) {
+        _.isFunction(task[method]) && task[method].apply(task, args);
+    });
 }
 
 // collect files names into an array
-glob(params.source + '/**/!(*.spec).js', function (er, files) {
+glob(params.source + '/**/*+(.js|.html)', function (er, files) {
 
-    _.each(tasks, function (task) {
-        logger.info('');
-        logger.info('Performing task: ' + task.name);
-
-        _.isFunction(task.firstPass) && task.firstPass();
-
+    _.each(['firstPass', 'secondPass'], function (pass) {
+        lint.pass = pass;
+        callTaskMethod('startPass', pass);
         _.each(files, function (file) {
-            var result = read(file);
-            if (!task.filterFile || task.filterFile(result.original, result.compressed, result.lines)) {
-                process(task, result);
-            }
-        });
-
-        if (task.secondPass) {
-            _.isFunction(task.secondPass) && task.secondPass();
-            _.each(files, function (file) {
-                var result = read(file);
-                if (!task.filterFile || task.filterFile(result.original, result.compressed, result.lines)) {
-                    process(task, result);
+            lint.read(file);
+            _.each(tasks, function(task) {
+                if(_.isFunction(task.filter) ? task.filter.call(task) : true) {
+                    _.isFunction(task[pass]) && task[pass].call(task);
                 }
             });
-        }
+        });
+        lint.clear();
+        callTaskMethod('finishPass', pass);
     });
 
-    _.each(tasks, function (task) {
-        if (_.isFunction(task.report)) {
-            logger.info('');
-            logger.info('Report task: ' + task.name);
-            logger.info('');
-            task.report();
-        }
-    });
-
+    callTaskMethod('report');
 });

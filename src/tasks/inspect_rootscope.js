@@ -1,5 +1,6 @@
 var logger = require('winston');
 var _ = require('lodash');
+var lint = require('../lint');
 
 var declare_function = /function\s*\([^\)]*\)/g;
 
@@ -9,7 +10,6 @@ var rootScope_property = /\$rootScope\.([\$_a-zA-Z0-9]+)/ig;
  * Counts the occurrences of rootScope usage in the source.
  */
 module.exports = {
-    name: 'RootScope Inspection',
     data: {
         injected: 0,
         property_usages: 0,

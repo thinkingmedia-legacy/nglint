@@ -1,11 +1,11 @@
 var logger = require('winston');
 var _ = require('lodash');
+var lint = require('../lint');
 
 /**
  * Ensures that all $broadcast calls have a listening $on handler.
  */
 module.exports = {
-    name: 'Match Broadcast',
     broadcasts: [],
     counters: {},
     pass: 'first',
