@@ -29,7 +29,7 @@ catch ($ex) {
 var tasks = [
     //require('./tasks/match_broadcast'),
     //require('./tasks/inspect_rootscope'),
-    require('./tasks/global_variables')
+    require('./tasks/globals')
 ];
 
 function callTaskMethod() {
