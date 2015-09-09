@@ -1,5 +1,5 @@
 {
-  "name": "angularjs-inspector",
+  "name": "nglist",
   "version": "1.0.0",
   "description": "Node.js source code inspector for AngularJS projects.",
   "preferGlobal": "true",
@@ -24,19 +24,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thinkingmedia/angularjs-inspector.git"
+    "url": "git+https://github.com/thinkingmedia/nglist.git"
   },
   "keywords": [
     "angularjs",
-    "inspector",
-    "quality",
+    "angular-js",
+    "angular",
+    "eslint",
+    "jshint",
+    "jslint",
+    "code",
+    "standard",
+    "code-quality",
     "lint"
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/thinkingmedia/angularjs-inspector/issues"
+    "url": "https://github.com/thinkingmedia/nglist/issues"
   },
-  "homepage": "https://github.com/thinkingmedia/angularjs-inspector#readme",
+  "homepage": "https://github.com/thinkingmedia/nglist#readme",
   "dependencies": {
     "fs-extra": "^0.24.0",
     "glob": "^5.0.14",
