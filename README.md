@@ -19,13 +19,13 @@ AngularJS Inspector is a Node.js command line tool that reads your source code (
 #### Install
 
 ```sh
-$ npm install -g angularjs-inspector
+$ npm install -g nglint
 ```
 
 #### Usage
 
 ```sh
-$ ngInspector /src
+$ nglint /src
 ```
 
 where ```/src``` is the path to your AngularJS source code.
